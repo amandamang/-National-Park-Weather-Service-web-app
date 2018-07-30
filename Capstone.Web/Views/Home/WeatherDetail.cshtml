@@ -1,0 +1,157 @@
+﻿@using Capstone.Web.Models
+@model DetailView
+@{
+    string sessionValue = Session["Scale"] as string;
+    //string parkCode = Session["ParkCode"] as string;
+    bool isChecked = false;
+    var convert = Model.ConvertedTemps();
+    DateTime dateAndTime = DateTime.Today;
+    var date = dateAndTime.DayOfWeek.ToString();
+    string forecast = "";
+}
+<div class="container-fluid">
+    <br />
+    <h2>@Model.park.ParkName</h2>
+    @*<h1>Celsius View: @sessionValue</h1>*@
+
+    <img src="~/Content/img/parks/@(Model.park.ParkCode).jpg" class="detail-img" />
+    <div class="flex-container">
+
+        <ul style="list-style-type:none">
+
+            <li><strong>State</strong> @Model.park.State</li>
+            <li><strong>Acres</strong> @Model.park.Acreage.ToString("N0")</li>
+            <li><strong>Elevation</strong> @Model.park.ElevationInFeet ft.</li>
+            <li><strong>Miles of Trails</strong> @Model.park.MilesOfTrail mi</li>
+            <li><strong>Number of Campsites </strong> @Model.park.NumberOfCampSites</li>
+            <li><strong>Climate</strong> @Model.park.Climate</li>
+            <li><strong>Year Founded </strong> @Model.park.YearFounded</li>
+            <li><strong>Annual Visitors</strong> @Model.park.AnnualVisitorCount.ToString("N0")</li>
+            <li><strong>Entry Fee</strong> @Model.park.EntryFee.ToString("c")</li>
+            <li><strong>Number of Animal Species</strong> @Model.park.NumberOfAnimalSpecies</li>
+            <li><strong>Park Description</strong> @Model.park.ParkDescription.</li>
+        </ul>
+
+    </div>
+
+    <div class="container-fluid">
+        <blockquote class="blockquote">
+            <p class="mb-0">@Model.park.InspirationalQuote</p>
+            <footer class="blockquote-footer">@Model.park.QuoteSource </footer>
+        </blockquote>
+    </div>
+
+
+    <div class="container-fluid">
+        @using (Html.BeginForm("Weather", "Home"))
+        {
+            <div>
+                Check box for celsius
+                @Html.CheckBox("Scale", isChecked)
+                <input type="hidden" id="parkCode" name="parkCode" value="@Model.park.ParkCode">
+                <button>Submit</button>
+            </div>
+        }
+        </div>
+
+
+        <div class="flex-container-weather">
+
+            @*@for (int i = 0; i < Model.weather.Count; i++)
+                {
+                    <div>
+                        @Model.weather[i].GetForecastMessage()
+                        <br />
+                        @Model.weather[i].GetTemperatureMessage()
+                    </div>
+                    @*<div>@Model.weather[i].GetTemperatureMessage()</div>*@
+            @*}*@
+            @if (sessionValue == "false" || sessionValue == null)
+            {
+                foreach (var item in Model.weather)
+                {
+                    <div>
+                        <img src="~/Content/img/weather/@(item.Forecast).png" class="weather-pic" alt="@item.Forecast" />
+                        @if (item.FiveDayForecastValue == 1)
+                        {
+                            <p>@date</p>
+                        }
+                        @if (item.FiveDayForecastValue == 2)
+                        {
+                            date = DateTime.Now.AddDays(1).DayOfWeek.ToString();
+                            <p>@date</p>
+                        }
+                        @if (item.FiveDayForecastValue == 3)
+                        {
+                            date = DateTime.Now.AddDays(2).DayOfWeek.ToString();
+                            <p>@date</p>
+                        }
+                        @if (item.FiveDayForecastValue == 4)
+                        {
+                            date = DateTime.Now.AddDays(3).DayOfWeek.ToString();
+                            <p>@date</p>
+                        }
+                        @if (item.FiveDayForecastValue == 5)
+                        {
+                            date = DateTime.Now.AddDays(4).DayOfWeek.ToString();
+                            <p>@date</p>
+                        }
+                        @forecast @char.ToUpper(item.Forecast[0])@item.Forecast.Substring(1)
+                        <p>@forecast</p>
+                        <p>Low of @item.LowTemp °F</p>
+                        <p>High of @item.HighTemp °F</p>
+                        @if (item.FiveDayForecastValue == 1)
+                        {
+                            @item.GetForecastMessage()
+                            <br />
+                            @item.GetTemperatureMessage()
+                        }
+                    </div>
+                }
+            }
+            @if (sessionValue == "true")
+            {
+                foreach (var item in convert)
+                {
+                    <div>
+                        <img src="~/Content/img/weather/@(item.Forecast).png" class="weather-pic" alt="@item.Forecast" />
+                        @if (item.FiveDayForecastValue == 1)
+                        {
+                            <p>@date</p>
+                        }
+                        @if (item.FiveDayForecastValue == 2)
+                        {
+                            date = DateTime.Now.AddDays(1).DayOfWeek.ToString();
+                            <p>@date</p>
+                        }
+                        @if (item.FiveDayForecastValue == 3)
+                        {
+                            date = DateTime.Now.AddDays(2).DayOfWeek.ToString();
+                            <p>@date</p>
+                        }
+                        @if (item.FiveDayForecastValue == 4)
+                        {
+                            date = DateTime.Now.AddDays(3).DayOfWeek.ToString();
+                            <p>@date</p>
+                        }
+                        @if (item.FiveDayForecastValue == 5)
+                        {
+                            date = DateTime.Now.AddDays(4).DayOfWeek.ToString();
+                            <p>@date</p>
+                        }
+                        @forecast @char.ToUpper(item.Forecast[0])@item.Forecast.Substring(1)
+                        <p>@forecast</p>
+                        <p>Low of @item.LowTemp °C</p>
+                        <p>High of @item.HighTemp °C</p>
+                        @if (item.FiveDayForecastValue == 1)
+                        {
+                            @item.GetForecastMessage()
+                            <br />
+                            @item.GetTemperatureMessageC()
+                        }
+                    </div>
+
+                }
+            }
+        </div>
+    </div>

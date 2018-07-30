@@ -1,0 +1,25 @@
+﻿@using Capstone.Web.Models
+@model List<Favorites>
+
+@{
+    /**/
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h2>Survey Results</h2>
+</div>
+
+@foreach (var item in Model)
+{
+    <div class="flex-container-fav">
+        
+        <div class="text-center"><img src="~/Content/img/parks/@(item.ParkCode.ToLower()).jpg" class="favorites-display" /></div>
+        <div>
+            <h3>@item.ParkName</h3>
+            <p>Survey Count @item.ParkCount</p>
+            <p>@item.ParkDescription</p>
+        </div>
+    </div>
+}
